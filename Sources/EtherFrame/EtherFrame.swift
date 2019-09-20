@@ -1,5 +1,6 @@
 import Kitura
 import Dispatch
+import LoggerAPI
 
 public class EtherFrame {
 
@@ -31,6 +32,7 @@ public class EtherFrame {
     }
     
     func execute(async block: @escaping (() -> Void)) {
+        Log.debug("execute async")
         workItem.cancel()
         workItem = DispatchWorkItem(qos: .default, flags: [], block: block)
         workerQueue.async(execute: workItem)

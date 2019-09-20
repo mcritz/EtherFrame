@@ -1,5 +1,6 @@
 import Foundation
 import SwiftyGPIO
+import LoggerAPI
 
 enum HardwareError: Error {
     case invalidGPIO
@@ -15,9 +16,15 @@ class Hardware {
         self.gpios = SwiftyGPIO.GPIOs(for: .RaspberryPi2)
         self.gp = gpios[.P2]!
         self.gp.direction = .OUT
+        Log.debug("hardware init")
+    }
+    
+    deinit {
+        Log.debug("hardware deinit")
     }
     
     func led(isActive: Bool) {
+        Log.debug("LED \(isActive)")
         gp.value = isActive ? 1 : 0
     }
     
