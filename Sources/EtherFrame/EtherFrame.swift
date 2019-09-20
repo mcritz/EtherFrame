@@ -9,7 +9,7 @@ public class EtherFrame {
 
     public init() throws {
         workItem = DispatchWorkItem(block: {
-            print("init async task")
+            print("+++++\n+++++\n++++++\nInit\n+++++\n+++++\n+++++\n")
         })
     }
 
@@ -31,7 +31,7 @@ public class EtherFrame {
     
     func execute(async block: @escaping (() -> Void)) {
         workItem.cancel()
-        workItem = DispatchWorkItem(qos: .background, flags: [], block: block)
+        workItem = DispatchWorkItem(qos: .default, flags: [], block: block)
         workerQueue.async(execute: workItem)
     }
     

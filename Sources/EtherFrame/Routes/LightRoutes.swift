@@ -6,11 +6,11 @@ func initializeLightRoutes(app: EtherFrame) {
 
 extension EtherFrame {
     static var lights = [Light]()
-    static var hardware = Hardware()
     func postHandler(light: Light,
                      completion: (Light?, RequestError?) -> Void) {
         execute(async: {
-            EtherFrame.hardware.blinker(willBlink: light.isActive)
+            print("+++++\n+++++\n++++++\nBlink\n+++++\n+++++\n+++++\n")
+            Hardware().blinker(willBlink: light.isActive)
         })
         execute {
             EtherFrame.lights.append(light)
