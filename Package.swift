@@ -7,6 +7,7 @@ let package = Package(
         .package(url: "https://github.com/IBM-Swift/Kitura", from: "2.8.1"),
         .package(url: "https://github.com/IBM-Swift/Swift-Kuery-SQLite", from: "2.0.1"),
         .package(url: "https://github.com/IBM-Swift/HeliumLogger", from: "1.9.0"),
+        .package(url: "https://github.com/uraimo/SwiftyGPIO.git", from: "1.1.10"),
     ],
     targets: [
         .target(
@@ -15,6 +16,7 @@ let package = Package(
                 "Kitura",
                 "SwiftKuerySQLite",
                 "HeliumLogger",
+                "SwiftyGPIO",
             ]
         ),
         .testTarget(
