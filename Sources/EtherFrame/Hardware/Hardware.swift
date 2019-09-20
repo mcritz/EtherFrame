@@ -9,7 +9,7 @@ class Hardware {
     let gpios: [GPIOName: GPIO]
     let gp: GPIO
     var iteration = 0
-    var isBlinking = false
+    static var isBlinking = false
     
     init() {
         self.gpios = SwiftyGPIO.GPIOs(for: .RaspberryPi2)
@@ -18,8 +18,8 @@ class Hardware {
     }
     
     func blinker(willBlink: Bool) {
-        isBlinking = willBlink
-        while (isBlinking) {
+        Hardware.isBlinking = willBlink
+        while (Hardware.isBlinking) {
             iteration += 1
             print("iteration \(iteration)")
             gp.value = iteration % 2

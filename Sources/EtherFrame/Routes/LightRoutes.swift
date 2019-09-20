@@ -9,9 +9,11 @@ extension EtherFrame {
     static var hardware = Hardware()
     func postHandler(light: Light,
                      completion: (Light?, RequestError?) -> Void) {
+        execute(async: {
+            EtherFrame.hardware.blinker(willBlink: light.isActive)
+        })
         execute {
             EtherFrame.lights.append(light)
-            EtherFrame.hardware.blinker(willBlink: light.isActive)
         }
         completion(light, nil)
     }
