@@ -10,7 +10,7 @@ extension EtherFrame {
                      completion: (Light?, RequestError?) -> Void) {
         execute(async: {
             print("+++++\n+++++\n++++++\nBlink\n+++++\n+++++\n+++++\n")
-            self.hardware.blinker(willBlink: light.isActive)
+            self.hardware.led(isActive: light.isActive)
         })
         execute {
             EtherFrame.lights.append(light)

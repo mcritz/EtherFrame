@@ -17,6 +17,10 @@ class Hardware {
         self.gp.direction = .OUT
     }
     
+    func led(isActive: Bool) {
+        gp.value = isActive ? 1 : 0
+    }
+    
     func blinker(willBlink: Bool) {
         Hardware.isBlinking = willBlink
         while (Hardware.isBlinking) {
