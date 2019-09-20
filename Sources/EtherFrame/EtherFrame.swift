@@ -5,12 +5,13 @@ public class EtherFrame {
 
     let router = Router()
     let workerQueue = DispatchQueue(label: "worker")
-    var workItem: DispatchWorkItem
+    var workItem = DispatchWorkItem(block: {
+        print("init")
+    })
+    let hardware: Hardware
 
     public init() throws {
-        workItem = DispatchWorkItem(block: {
-            print("+++++\n+++++\n++++++\nInit\n+++++\n+++++\n+++++\n")
-        })
+        hardware = Hardware()
     }
 
     func postInit() throws {
