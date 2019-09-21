@@ -1,0 +1,21 @@
+import Kitura
+import KituraContracts
+import LoggerAPI
+import FileKit
+import Foundation
+
+func initializeFileRoutes(app: EtherFrame) {
+    app.router.post("/images", middleware: BodyParser())
+    app.router.post("/images") { request, response, next in
+        if let value = request.body {
+            if case let .raw(data) = value {
+                try data.write(to: FileKit.executableFolderURL
+                    .appendingPathComponent("uploads", isDirectory: true)
+                    .appendingPathComponent(UUID().uuidString))
+            }
+        }
+    }
+}
+
+extension EtherFrame {
+}
