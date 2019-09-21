@@ -9,9 +9,11 @@ func initializeFileRoutes(app: EtherFrame) {
     app.router.post("/images") { request, response, next in
         if let value = request.body {
             if case let .raw(data) = value {
-                try data.write(to: FileKit.executableFolderURL
-                    .appendingPathComponent("uploads", isDirectory: true)
-                    .appendingPathComponent(UUID().uuidString))
+                let url = FileKit.executableFolderURL
+                .appendingPathComponent("uploads", isDirectory: true)
+                .appendingPathComponent(UUID().uuidString)
+                Log.info("File URL: \(url.absoluteString)")
+                try data.write(to: url)
             }
         }
     }
