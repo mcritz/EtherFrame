@@ -17,6 +17,7 @@ public class EtherFrame {
 
     func postInit() throws {
         initializeLightRoutes(app: self)
+        initializeFileRoutes(app: self)
     }
 
     public func run() throws {
