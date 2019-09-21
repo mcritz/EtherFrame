@@ -17,7 +17,7 @@ func initializeFileRoutes(app: EtherFrame) {
                 .appendingPathComponent("uploads", isDirectory: true)
                 .appendingPathComponent(UUID().uuidString)
                 Log.info("File URL: \(url.absoluteString)")
-                try data.write(to: url)
+                try "data".write(to: url, atomically: true)
             }
         }
     }
