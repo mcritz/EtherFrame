@@ -40,6 +40,7 @@ func initializeFileRoutes(app: EtherFrame) {
 extension EtherFrame {
     static func prepareFolders() throws {
         let uploadURL = FileKit.executableFolderURL.appendingPathComponent("uploads", isDirectory: true)
+        Log.debug("Uploads: \(uploadURL.absoluteString)")
         if FileManager.default.fileExists(atPath: uploadURL.absoluteString) {
             Log.info("uploads directory exists")
             return
