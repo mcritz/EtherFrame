@@ -46,9 +46,7 @@ extension EtherFrame {
             return
         }
         do {
-            try FileManager.default.createDirectory(atPath: uploadURL.absoluteString,
-                                            withIntermediateDirectories: true,
-                                            attributes: [:])
+            try FileManager.default.createDirectory(at: uploadURL, withIntermediateDirectories: false)
         } catch {
             Log.error("Could not create uploads directory")
             fatalError()
