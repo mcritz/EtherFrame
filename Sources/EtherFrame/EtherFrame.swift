@@ -16,6 +16,7 @@ public class EtherFrame {
     }
 
     func postInit() throws {
+        try EtherFrame.prepareFolders()
         initializeLightRoutes(app: self)
         initializeFileRoutes(app: self)
     }
