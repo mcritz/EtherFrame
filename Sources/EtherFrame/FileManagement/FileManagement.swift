@@ -7,7 +7,7 @@ import Foundation
 func initializeFileRoutes(app: EtherFrame) {
     app.router.post("/images", middleware: BodyParser())
     app.router.post("/images") { request, response, next in
-        Log.info("images res \(request) \(request.body)")
+        Log.info("Image Post request") // res \(request) \(request.body)")
         
         if let value = request.body {
             if case let .multipart(data) = value {
@@ -23,7 +23,11 @@ func initializeFileRoutes(app: EtherFrame) {
                     do {
                         if case let .raw(data) = part.body {
                             try data.write(to: url,
-                                           options: .atomic)
+                                options: .atomic)
+                            guard IT8951_Init() == 0 else {
+                                try response.send(status: .internalServerError).end()
+                            }
+                            IT8951_BMP_Example(0, 0, url.absoluteString)
                             try response.send(status: .created).end()
                         }
                     } catch {
