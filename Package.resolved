@@ -110,15 +110,6 @@
         }
       },
       {
-        "package": "SwiftEPD",
-        "repositoryURL": "https://github.com/mcritz/SwiftEPD.git",
-        "state": {
-          "branch": null,
-          "revision": "13a76c1f68ff0cc1b121c62a0dd72c169678a2ad",
-          "version": "0.0.2"
-        }
-      },
-      {
         "package": "SwiftyGPIO",
         "repositoryURL": "https://github.com/uraimo/SwiftyGPIO.git",
         "state": {
