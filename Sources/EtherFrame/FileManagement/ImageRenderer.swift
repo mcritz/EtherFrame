@@ -13,7 +13,7 @@ struct ImageRenderer {
     
     func display(file at path: URL) throws -> Int32 {
         do {
-            return shell(["IT8951", "0", "0", path.absoluteString])
+            return shell(["sudo", "IT8951", "0", "0", path.absoluteString])
         } catch {
             fatalError("Video driver failed to render")
         }
