@@ -11,7 +11,7 @@ import Foundation
 
 struct ImageRenderer {
     
-    func display(file at path: URL) throws -> Int32 {
+    func display(_ path: URL) throws -> Int32 {
         do {
             return shell(["sudo", "IT8951", "0", "0", path.absoluteString])
         } catch {

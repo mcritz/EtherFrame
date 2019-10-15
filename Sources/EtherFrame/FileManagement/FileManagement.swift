@@ -25,14 +25,9 @@ func initializeFileRoutes(app: EtherFrame) {
                         if case let .raw(data) = part.body {
                             try data.write(to: url,
                                 options: .atomic)
-                            Log.info("IT8951_Init()")
-                            guard IT8951_Init() == 0 else {
-                                try response.send(status: .internalServerError).end()
-                            }
-                            Log.info("Converting url.absoluteString to CChar")
-                            let pathCChar: CChar = try CChar(value: url.absoluteString)
                             Log.info("Trying to display BMP to EPD")
-                            IT8951_BMP_Example(0, 0, pathCChar)
+                            let renderer = ImageRenderer()
+                            renderer.display(url)
                             try response.send(status: .created).end()
                         }
                     } catch {
