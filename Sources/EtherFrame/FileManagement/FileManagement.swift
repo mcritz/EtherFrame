@@ -3,6 +3,7 @@ import KituraContracts
 import LoggerAPI
 import FileKit
 import Foundation
+import SwiftEPD
 
 func initializeFileRoutes(app: EtherFrame) {
     app.router.post("/images", middleware: BodyParser())

@@ -9,6 +9,7 @@ let package = Package(
         .package(url: "https://github.com/IBM-Swift/HeliumLogger", from: "1.9.0"),
         .package(url: "https://github.com/uraimo/SwiftyGPIO.git", from: "1.1.10"),
         .package(url: "https://github.com/IBM-Swift/FileKit.git", from: "0.0.2"),
+        .package(url: "https://github.com/mcritz/SwiftEPD.git", from: "0.0.2")
     ],
     targets: [
         .target(
