@@ -3,27 +3,41 @@ import KituraContracts
 import LoggerAPI
 import FileKit
 import Foundation
+import SwiftGD
 
 func initializeFileRoutes(app: EtherFrame) {
     app.router.post("/images", middleware: BodyParser())
     app.router.post("/images") { request, response, next in
-        Log.info("images res \(request) \(request.body)")
+        Log.info("images res \(request) \(String(describing: request.body))")
         
         if let value = request.body {
             if case let .multipart(data) = value {
                 for part in data {
                     Log.info("Part:\n\(part.filename), \(part.name), \(part.type), \(part.body)")
                     
-                    let url = FileKit.executableFolderURL
+                    let uploadURL = FileKit.executableFolderURL
                         .appendingPathComponent("uploads", isDirectory: true)
                         .appendingPathComponent(part.filename)
+                    let processedURL = FileKit.executableFolderURL
+                        .appendingPathComponent("processed", isDirectory: true)
+                        .appendingPathComponent(part.filename)
                     
-                    Log.info("File URL: \(url.absoluteString)")
+                    Log.info("File URL: \(uploadURL.absoluteString)")
                     
                     do {
                         if case let .raw(data) = part.body {
-                            try data.write(to: url,
+                            try data.write(to: uploadURL,
                                            options: .atomic)
+                            let image = try Image(data: data)
+                            let processor = ImageProcessor(source: image, preferred: Size(width: 1872, height: 1404))
+                            processor.process()
+                            guard let processedImage = processor.output else {
+                                try response.send(status: .expectationFailed).end()
+                                return
+                            }
+                            let bmpData = try processedImage.export(as: .bmp(compression: false))
+                            try bmpData.write(to: processedURL,
+                                               options: .atomicWrite)
                             try response.send(status: .created).end()
                         }
                     } catch {
@@ -38,18 +52,19 @@ func initializeFileRoutes(app: EtherFrame) {
 }
 
 extension EtherFrame {
-    static func prepareFolders() throws {
-        let uploadURL = FileKit.executableFolderURL.appendingPathComponent("uploads", isDirectory: true)
-        Log.debug("Uploads: \(uploadURL.absoluteString)")
-        if FileManager.default.fileExists(atPath: uploadURL.absoluteString) {
-            Log.info("uploads directory exists")
-            return
-        }
-        do {
-            try FileManager.default.createDirectory(at: uploadURL, withIntermediateDirectories: false)
-        } catch {
-            Log.error("Could not create uploads directory")
-            fatalError()
+    static func prepareFolders(names: [String]) throws {
+        for name in names {
+            let url = FileKit.executableFolderURL.appendingPathComponent(name, isDirectory: true)
+            if FileManager.default.fileExists(atPath: url.path) {
+                Log.info("\(name) directory exists")
+                return
+            }
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false)
+            } catch {
+                Log.error("Could not create \(name) directory")
+                fatalError()
+            }
         }
     }
 }

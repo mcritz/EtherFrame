@@ -7,17 +7,14 @@ public class EtherFrame {
     let router = Router()
     let workerQueue = DispatchQueue(label: "worker")
     var workItem = DispatchWorkItem(block: {
-        print("init")
+        print("workItem")
     })
-    let hardware: Hardware
 
     public init() throws {
-        hardware = Hardware()
     }
 
     func postInit() throws {
-        try EtherFrame.prepareFolders()
-        initializeLightRoutes(app: self)
+        try EtherFrame.prepareFolders(names: ["uploads", "processed"])
         initializeFileRoutes(app: self)
     }
 
