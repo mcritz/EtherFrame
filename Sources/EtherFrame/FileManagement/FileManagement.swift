@@ -30,9 +30,10 @@ func handleMultipart(image part: Part,
     let uploadURL = FileKit.executableFolderURL
         .appendingPathComponent("uploads", isDirectory: true)
         .appendingPathComponent(part.filename)
+    let processedFilename = part.filename.appending(".bmp")
     let processedURL = FileKit.executableFolderURL
         .appendingPathComponent("processed", isDirectory: true)
-        .appendingPathComponent(part.filename)
+        .appendingPathComponent(processedFilename)
     
     Log.info("File URL: \(uploadURL.absoluteString)")
     
