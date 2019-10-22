@@ -52,6 +52,13 @@ func handleMultipart(image part: Part,
             try bmpData.write(to: processedURL,
                                options: .atomicWrite)
             try response.send(status: .created).end()
+            let task = Process()
+            task.launchPath = "/usr/bin/open"
+            task.arguments = [
+                "\(processedURL.path)"
+            ]
+            task.launch()
+            task.waitUntilExit()
         }
     } catch {
         try response
