@@ -53,7 +53,7 @@ func handleMultipart(image part: Part,
                                options: .atomicWrite)
             try response.send(status: .created).end()
             let task = Process()
-            task.launchPath = "/usr/bin/open"
+            task.launchPath = "/usr/local/bin/Display"
             task.arguments = [
                 "\(processedURL.path)"
             ]
