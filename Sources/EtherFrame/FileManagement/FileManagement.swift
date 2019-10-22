@@ -5,6 +5,8 @@ import FileKit
 import Foundation
 import SwiftGD
 
+let screenSize = Size(width: 1872, height: 1404)
+
 func initializeFileRoutes(app: EtherFrame) {
     app.router.post("/images", middleware: BodyParser())
     app.router.post("/images") { request, response, next in
@@ -13,41 +15,47 @@ func initializeFileRoutes(app: EtherFrame) {
         if let value = request.body {
             if case let .multipart(data) = value {
                 for part in data {
-                    Log.info("Part:\n\(part.filename), \(part.name), \(part.type), \(part.body)")
-                    
-                    let uploadURL = FileKit.executableFolderURL
-                        .appendingPathComponent("uploads", isDirectory: true)
-                        .appendingPathComponent(part.filename)
-                    let processedURL = FileKit.executableFolderURL
-                        .appendingPathComponent("processed", isDirectory: true)
-                        .appendingPathComponent(part.filename)
-                    
-                    Log.info("File URL: \(uploadURL.absoluteString)")
-                    
-                    do {
-                        if case let .raw(data) = part.body {
-                            try data.write(to: uploadURL,
-                                           options: .atomic)
-                            let image = try Image(data: data)
-                            let processor = ImageProcessor(source: image, preferred: Size(width: 1872, height: 1404))
-                            processor.process()
-                            guard let processedImage = processor.output else {
-                                try response.send(status: .expectationFailed).end()
-                                return
-                            }
-                            let bmpData = try processedImage.export(as: .bmp(compression: false))
-                            try bmpData.write(to: processedURL,
-                                               options: .atomicWrite)
-                            try response.send(status: .created).end()
-                        }
-                    } catch {
-                        try response
-                            .send(status: .internalServerError)
-                            .end()
-                    }
+                    try handleMultipart(image: part,
+                                        response: response)
                 }
             }
         }
+    }
+}
+
+func handleMultipart(image part: Part,
+                     response: RouterResponse) throws {
+    Log.info("Part:\n\(part.filename), \(part.name), \(part.type), \(part.body)")
+    
+    let uploadURL = FileKit.executableFolderURL
+        .appendingPathComponent("uploads", isDirectory: true)
+        .appendingPathComponent(part.filename)
+    let processedURL = FileKit.executableFolderURL
+        .appendingPathComponent("processed", isDirectory: true)
+        .appendingPathComponent(part.filename)
+    
+    Log.info("File URL: \(uploadURL.absoluteString)")
+    
+    do {
+        if case let .raw(data) = part.body {
+            try data.write(to: uploadURL,
+                           options: .atomic)
+            let image = try Image(data: data)
+            let processor = ImageProcessor(source: image, preferred: screenSize)
+            processor.process()
+            guard let processedImage = processor.output else {
+                try response.send(status: .expectationFailed).end()
+                return
+            }
+            let bmpData = try processedImage.export(as: .bmp(compression: false))
+            try bmpData.write(to: processedURL,
+                               options: .atomicWrite)
+            try response.send(status: .created).end()
+        }
+    } catch {
+        try response
+            .send(status: .internalServerError)
+            .end()
     }
 }
 
