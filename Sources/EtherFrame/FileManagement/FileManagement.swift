@@ -50,14 +50,14 @@ func handleMultipart(image part: Part,
             }
             let bmpData = try processedImage.export(as: .bmp(compression: false))
             try bmpData.write(to: processedURL,
-                               options: .atomicWrite)
+                               options: .atomic)
             try response.send(status: .created).end()
             let task = Process()
-            task.launchPath = "/usr/local/bin/Display"
+            task.executableURL = URL(fileURLWithPath: "/usr/local/bin/Display")
             task.arguments = [
                 "\(processedURL.path)"
             ]
-            task.launch()
+            try task.run()
             task.waitUntilExit()
         }
     } catch {

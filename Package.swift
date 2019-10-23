@@ -3,6 +3,10 @@ import PackageDescription
 
 let package = Package(
     name: "EtherFrame",
+    patforms: [
+        .macOS(.v10_13),
+        .linux
+    ],
     dependencies: [
         .package(url: "https://github.com/IBM-Swift/Kitura", from: "2.8.1"),
         .package(url: "https://github.com/IBM-Swift/Swift-Kuery-SQLite", from: "2.0.1"),
