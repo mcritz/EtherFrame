@@ -53,14 +53,19 @@ func handleMultipart(image part: Part,
                                options: .atomic)
             try response.send(status: .created).end()
             let task = Process()
+            // FIXME: Brittle. This should be more configurable.
             task.executableURL = URL(fileURLWithPath: "/usr/local/bin/Display")
             task.arguments = [
                 "\(processedURL.path)"
             ]
             try task.run()
             task.waitUntilExit()
+            if task.terminationStatus != 0 {
+                Log.error("Processor task did not terminate successfully.")
+            }
         }
     } catch {
+        Log.error("Could not process image. A likely cuplrit is that `task.executableURL` does not point to an available, runnable exectuable.")
         try response
             .send(status: .internalServerError)
             .end()
