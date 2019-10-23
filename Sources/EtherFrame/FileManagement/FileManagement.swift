@@ -60,6 +60,7 @@ func handleMultipart(image part: Part,
             ]
             try task.run()
             task.waitUntilExit()
+            Log.info("task terminates as \(String(describing: task.terminationStatus))")
             if task.terminationStatus != 0 {
                 Log.error("Processor task did not terminate successfully.")
             }
