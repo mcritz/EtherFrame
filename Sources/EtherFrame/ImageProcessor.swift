@@ -42,6 +42,8 @@ class ImageProcessor {
     func processGreyscale() {
         print("desaturate")
         output?.desaturate()
+        output?.reduceColors(max: 16,
+                             dither: true)
     }
     func process() {
         resize()
